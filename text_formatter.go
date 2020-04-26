@@ -91,6 +91,9 @@ type TextFormatter struct {
 
 	// The max length of the level text, generated dynamically on init
 	levelTextMaxLength int
+
+	// modify by kent; to add information fixed reserved width.
+	MsgReservedWidth int
 }
 
 func (f *TextFormatter) init(entry *Entry) {
@@ -270,19 +273,25 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 		}
 	}
 
+	// Modify by kent
+	if f.MsgReservedWidth <= 0 {
+		f.MsgReservedWidth = 70
+	}
+	reserved := ` %-` + fmt.Sprintf("%ds", f.MsgReservedWidth)
 	switch {
 	case f.DisableTimestamp:
-		fmt.Fprintf(b, "\x1b[%dm%s\x1b[0m%s %-44s ", levelColor, levelText, caller, entry.Message)
+		_, _ = fmt.Fprintf(b, "\x1b[%dm%s\x1b[0m"+reserved, levelColor, levelText, entry.Message)
 	case !f.FullTimestamp:
-		fmt.Fprintf(b, "\x1b[%dm%s\x1b[0m[%04d]%s %-44s ", levelColor, levelText, int(entry.Time.Sub(baseTimestamp)/time.Second), caller, entry.Message)
+		_, _ = fmt.Fprintf(b, "\x1b[%dm%s\x1b[0m[%04d]"+reserved, levelColor, levelText, int(entry.Time.Sub(baseTimestamp)/time.Second), entry.Message)
 	default:
-		fmt.Fprintf(b, "\x1b[%dm%s\x1b[0m[%s]%s %-44s ", levelColor, levelText, entry.Time.Format(timestampFormat), caller, entry.Message)
+		_, _ = fmt.Fprintf(b, "\x1b[%dm%s\x1b[0m[%s]"+reserved, levelColor, levelText, entry.Time.Format(timestampFormat), entry.Message)
 	}
 	for _, k := range keys {
 		v := data[k]
-		fmt.Fprintf(b, " \x1b[%dm%s\x1b[0m=", levelColor, k)
+		_, _ = fmt.Fprintf(b, " \x1b[%dm%s\x1b[0m=", levelColor, k)
 		f.appendValue(b, v)
 	}
+	_, _ = fmt.Fprintf(b, " \x1b[%dm%s\x1b[0m", levelColor, caller)
 }
 
 func (f *TextFormatter) needsQuoting(text string) bool {
