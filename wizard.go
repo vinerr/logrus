@@ -18,11 +18,17 @@ const (
 )
 
 var (
-	appName  = os.Args[0]
-	ok       = false
-	paths    = []string{" ", "", "etc", "opt", "data", "srv"}
-	files    = []string{" ", "config", "dev_config", "test_config", "release_config"}
-	fileType = []string{"toml", "yaml"}
+	appName       = os.Args[0]
+	ok            = false
+	paths         = []string{" ", "", "etc", "opt", "data", "srv"}
+	files         = []string{" ", "config", "dev_config", "test_config", "release_config"}
+	fileType      = []string{"toml", "yaml"}
+	kentRepoSlice = []string{
+		"github.com/spiderorg/",
+		"github.com/penhauer-xiao/",
+		"github.com/wpecker",
+		"github.com/aialbatross/",
+	}
 )
 
 func init() {
@@ -168,6 +174,15 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 	}
 	file = fmt.Sprintf("%s:%d", file, frame.Line)
 	function = frame.Function
+	if idx := strings.LastIndex(function, ".func"); idx != -1 {
+		function = function[0:idx]
+	}
+	for _, v := range kentRepoSlice {
+		if idx := strings.Index(function, v); idx != -1 {
+			function = function[idx+len(v):]
+			break
+		}
+	}
 	return function, file
 }
 
