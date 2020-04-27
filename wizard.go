@@ -177,10 +177,17 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 	if idx := strings.LastIndex(function, ".func"); idx != -1 {
 		function = function[0:idx]
 	}
-	for _, v := range kentRepoSlice {
-		if idx := strings.Index(function, v); idx != -1 {
-			function = function[idx+len(v):]
-			break
+
+	if idx := strings.Index(function, "github.com"); idx == -1 {
+		if idx = strings.Index(function, "/"); idx != -1 {
+			function = function[idx+1:]
+		}
+	} else {
+		for _, v := range kentRepoSlice {
+			if idx := strings.Index(function, v); idx != -1 {
+				function = "~" + function[idx+len(v):]
+				break
+			}
 		}
 	}
 	return function, file
