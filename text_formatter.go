@@ -10,7 +10,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 	"unicode/utf8"
+
+	"github.com/thinkeridea/go-extend/exunicode/exutf8"
 )
 
 const (
@@ -284,14 +287,24 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	subLen := overLen % 5
 	overLen = overLen - subLen
 
-	if overLen >= msgLen {
-		if overLen < f.MsgReservedWidth {
+	if msgLen > 1 {
+		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
 			f.MsgReservedWidth = overLen
+		} else {
+			if overLen >= msgLen {
+				if overLen < f.MsgReservedWidth {
+					f.MsgReservedWidth = overLen
+				}
+			}
 		}
 	}
 
 	if strings.Index(entry.Message, "calculateReserved.") != -1 {
-		fmt.Println(msgLen, callerLen, subLen, overLen, f.MsgReservedWidth)
+		fmt.Println(msgLen)
+		fmt.Println(callerLen)
+		fmt.Println(subLen)
+		fmt.Println(overLen)
+		fmt.Println(f.MsgReservedWidth)
 	}
 
 	reserved := ` %-` + fmt.Sprintf("%ds", f.MsgReservedWidth)
