@@ -1,2 +1,7 @@
 logrus
 vendor
+
+.git
+/.idea
+*.iml
+
