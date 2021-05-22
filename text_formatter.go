@@ -288,16 +288,7 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 
 	if msgLen > 1 {
 		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
-			f.MsgReservedWidth = overLen
-			if strings.Index(entry.Message, "calculateReserved.") != -1 {
-				fmt.Println(index)
-				fmt.Println(entry.Message)
-				fmt.Println(msgLen)
-				fmt.Println(callerLen)
-				fmt.Println(subLen)
-				fmt.Println(overLen)
-				fmt.Println(f.MsgReservedWidth)
-			}
+			f.MsgReservedWidth = msgLen
 		} else {
 			if overLen >= msgLen {
 				if overLen < f.MsgReservedWidth {
@@ -305,15 +296,6 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 				}
 			}
 		}
-	}
-
-	if strings.Index(entry.Message, "calculateReserved.") != -1 {
-		fmt.Println(entry.Message)
-		fmt.Println(msgLen)
-		fmt.Println(callerLen)
-		fmt.Println(subLen)
-		fmt.Println(overLen)
-		fmt.Println(f.MsgReservedWidth)
 	}
 
 	reserved := ` %-` + fmt.Sprintf("%ds", f.MsgReservedWidth)
