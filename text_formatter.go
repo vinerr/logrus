@@ -281,7 +281,7 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	msgLen := len(entry.Message)
 	callerLen := len(caller)
 	overLen := 140 - callerLen
-	subLen := overLen % 10
+	subLen := overLen % 5
 	overLen = overLen - subLen
 
 	if overLen >= msgLen {
