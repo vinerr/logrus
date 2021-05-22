@@ -290,6 +290,10 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 		}
 	}
 
+	if strings.Index(entry.Message, "calculateReserved.") != -1 {
+		fmt.Println(msgLen, callerLen, subLen, overLen, f.MsgReservedWidth)
+	}
+
 	reserved := ` %-` + fmt.Sprintf("%ds", f.MsgReservedWidth)
 	switch {
 	case f.DisableTimestamp:
