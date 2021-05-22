@@ -299,6 +299,7 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	}
 
 	if strings.Index(entry.Message, "calculateReserved.") != -1 {
+		fmt.Println(entry.Message)
 		fmt.Println(msgLen)
 		fmt.Println(callerLen)
 		fmt.Println(subLen)
