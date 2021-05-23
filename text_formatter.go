@@ -3,7 +3,6 @@ package logrus
 import (
 	"bytes"
 	"fmt"
-	"math"
 	"os"
 	"runtime"
 	"sort"
@@ -286,7 +285,7 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	utf8MsgLen := utf8.RuneCountInString(entry.Message)
 	subLen := msgLen - utf8MsgLen
 
-	msgCeilLen := int(math.Ceil(float64(msgLen)/4.0) * 4.0)
+	// msgCeilLen := int(math.Ceil(float64(msgLen)/4.0) * 4.0)
 
 	// if strings.Index(entry.Message, "债基") != -1 {
 	// 	fmt.Println("01:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
