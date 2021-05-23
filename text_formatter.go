@@ -291,6 +291,12 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	if strings.Index(entry.Message, "债基") != -1 {
 		fmt.Println("01:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
 	}
+	if strings.Index(entry.Message, "月还") != -1 {
+		fmt.Println("01:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	}
+	if strings.Index(entry.Message, "还不够") != -1 {
+		fmt.Println("01:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	}
 
 	if msgLen > 1 {
 		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
@@ -299,10 +305,22 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 				if strings.Index(entry.Message, "债基") != -1 {
 					fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
 				}
+				if strings.Index(entry.Message, "月还") != -1 {
+					fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+				}
+				if strings.Index(entry.Message, "还不够") != -1 {
+					fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+				}
 				// f.MsgReservedWidth = msgCeilLen
 			} else {
 				f.MsgReservedWidth = overFloLen - 2
 				if strings.Index(entry.Message, "债基") != -1 {
+					fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+				}
+				if strings.Index(entry.Message, "月还") != -1 {
+					fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+				}
+				if strings.Index(entry.Message, "还不够") != -1 {
 					fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
 				}
 			}
@@ -311,6 +329,12 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 		}
 	}
 	if strings.Index(entry.Message, "债基") != -1 {
+		fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	}
+	if strings.Index(entry.Message, "月还") != -1 {
+		fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	}
+	if strings.Index(entry.Message, "还不够") != -1 {
 		fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
 	}
 
