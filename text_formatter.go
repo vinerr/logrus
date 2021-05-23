@@ -284,9 +284,12 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	msgLen := len(entry.Message)
 	msgCeilLen := int(math.Ceil(float64(msgLen)/5.0) * 5.0)
 	callerLen := len(caller)
-	overLen := 140 - callerLen
+	overLen := 139 - callerLen
 
-	// fmt.Println("00:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
+	if strings.Index(entry.Message, "Load finish for") != -1 {
+		fmt.Println("00:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
+	}
+
 	if msgLen > 1 {
 		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
 			if overLen >= msgCeilLen {
@@ -296,9 +299,15 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 			if overLen >= msgCeilLen {
 				if overLen < f.MsgReservedWidth {
 					f.MsgReservedWidth = overLen
+					if strings.Index(entry.Message, "Load finish for") != -1 {
+						fmt.Println("02:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
+					}
 				}
 			}
 		}
+	}
+	if strings.Index(entry.Message, "Load finish for") != -1 {
+		fmt.Println("03:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 	}
 
 	reserved := ` %-` + fmt.Sprintf("%ds", f.MsgReservedWidth)
