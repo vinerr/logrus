@@ -281,10 +281,16 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 		f.MsgReservedWidth = 70
 	}
 
-	msgLen := len(entry.Message)
-	msgCeilLen := int(math.Ceil(float64(msgLen)/4.0) * 4.0)
 	callerLen := len(caller)
 	overLen := 139 - callerLen
+
+	msgLen := len(entry.Message)
+	msgCeilLen := int(math.Ceil(float64(msgLen)/10.0) * 10.0)
+	if overLen < 5 {
+		msgCeilLen = int(math.Ceil(float64(msgLen)/2.0) * 2.0)
+	} else if overLen < 10 {
+		msgCeilLen = int(math.Ceil(float64(msgLen)/6.0) * 6.0)
+	}
 
 	if msgLen > 1 {
 		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
