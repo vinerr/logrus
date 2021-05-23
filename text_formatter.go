@@ -286,22 +286,16 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	callerLen := len(caller)
 	overLen := 140 - callerLen
 
-	fmt.Println("00:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
+	// fmt.Println("00:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 	if msgLen > 1 {
 		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
 			if overLen >= msgCeilLen {
 				f.MsgReservedWidth = msgCeilLen
-				fmt.Println("01:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
-			} else {
-				fmt.Println("02:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 			}
 		} else {
 			if overLen >= msgCeilLen {
 				if overLen < f.MsgReservedWidth {
 					f.MsgReservedWidth = overLen
-					fmt.Println("03:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
-				} else {
-					fmt.Println("04:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 				}
 			}
 		}
