@@ -282,7 +282,7 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	}
 
 	msgLen := len(entry.Message)
-	msgCeilLen := int(math.Ceil(float64(msgLen)/5.0) * 5.0)
+	msgCeilLen := int(math.Ceil(float64(msgLen)/4.0) * 4.0)
 	callerLen := len(caller)
 	overLen := 139 - callerLen
 
@@ -303,6 +303,8 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 						fmt.Println("02:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 					}
 				}
+			} else {
+				f.MsgReservedWidth = overLen
 			}
 		}
 	}
