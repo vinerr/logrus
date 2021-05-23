@@ -283,26 +283,27 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 
 	callerLen := len(caller)
 	overLen := 139 - callerLen
+	overFloLen := int(math.Floor(float64(overLen)/2.0) * 2.0)
 
 	msgLen := len(entry.Message)
 	msgCeilLen := int(math.Ceil(float64(msgLen)/4.0) * 4.0)
 
 	if strings.Index(entry.Message, "债基") != -1 {
-		fmt.Println("01:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
+		fmt.Println("01:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
 	}
 
 	if msgLen > 1 {
 		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
-			if overLen-2 >= msgCeilLen {
-				f.MsgReservedWidth = overLen - 2
+			if overFloLen-2 >= msgCeilLen {
+				f.MsgReservedWidth = overFloLen - 2
 				if strings.Index(entry.Message, "债基") != -1 {
-					fmt.Println("02:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
+					fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
 				}
 				// f.MsgReservedWidth = msgCeilLen
 			} else {
-				f.MsgReservedWidth = overLen - 2
+				f.MsgReservedWidth = overFloLen - 2
 				if strings.Index(entry.Message, "债基") != -1 {
-					fmt.Println("03:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
+					fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
 				}
 			}
 		} else if overLen < msgCeilLen || overLen < f.MsgReservedWidth {
@@ -310,7 +311,7 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 		}
 	}
 	if strings.Index(entry.Message, "债基") != -1 {
-		fmt.Println("04:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
+		fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
 	}
 
 	reserved := ` %-` + fmt.Sprintf("%ds", f.MsgReservedWidth)
