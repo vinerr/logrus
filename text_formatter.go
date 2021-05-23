@@ -3,6 +3,7 @@ package logrus
 import (
 	"bytes"
 	"fmt"
+	"math"
 	"os"
 	"runtime"
 	"sort"
@@ -281,26 +282,28 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	}
 
 	msgLen := len(entry.Message)
+	msgCeilLen := int(math.Ceil(float64(msgLen)/5.0) * 5.0)
 	callerLen := len(caller)
 	overLen := 140 - callerLen
-	subLen := overLen % 5
-	overLen = overLen - subLen
 
+	fmt.Println("00:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 	if msgLen > 1 {
 		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
-			f.MsgReservedWidth = msgLen
-			if overLen >= msgLen {
-				fmt.Println("01:", msgLen, callerLen, overLen, subLen)
+			if overLen >= msgCeilLen {
+				f.MsgReservedWidth = msgCeilLen
+				fmt.Println("01:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 			} else {
-				fmt.Println("02:", msgLen, callerLen, overLen, subLen)
+				fmt.Println("02:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 			}
 		} else {
-			if overLen >= msgLen {
+			if overLen >= msgCeilLen {
 				if overLen < f.MsgReservedWidth {
 					f.MsgReservedWidth = overLen
+					fmt.Println("03:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
+				} else {
+					fmt.Println("04:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 				}
 			}
-			fmt.Println("03:", msgLen, callerLen, overLen, subLen)
 		}
 	}
 
