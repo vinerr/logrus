@@ -287,7 +287,7 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	msgLen := len(entry.Message)
 	msgCeilLen := int(math.Ceil(float64(msgLen)/4.0) * 4.0)
 
-	if strings.Index(entry.Message, "月还") != -1 {
+	if strings.Index(entry.Message, "债基") != -1 {
 		fmt.Println("01:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 	}
 
@@ -295,13 +295,13 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
 			if overLen-2 >= msgCeilLen {
 				f.MsgReservedWidth = overLen - 2
-				if strings.Index(entry.Message, "月还") != -1 {
+				if strings.Index(entry.Message, "债基") != -1 {
 					fmt.Println("02:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 				}
 				// f.MsgReservedWidth = msgCeilLen
 			} else {
 				f.MsgReservedWidth = overLen - 2
-				if strings.Index(entry.Message, "月还") != -1 {
+				if strings.Index(entry.Message, "债基") != -1 {
 					fmt.Println("03:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 				}
 			}
@@ -309,7 +309,7 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 			f.MsgReservedWidth = overLen
 		}
 	}
-	if strings.Index(entry.Message, "月还") != -1 {
+	if strings.Index(entry.Message, "债基") != -1 {
 		fmt.Println("04:", msgLen, msgCeilLen, overLen, f.MsgReservedWidth, callerLen)
 	}
 
