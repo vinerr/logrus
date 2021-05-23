@@ -12,8 +12,6 @@ import (
 	"sync"
 	"time"
 	"unicode/utf8"
-
-	"github.com/thinkeridea/go-extend/exunicode/exutf8"
 )
 
 const (
@@ -286,63 +284,68 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	overFloLen := int(math.Floor(float64(overLen)/2.0) * 2.0)
 
 	msgLen := len(entry.Message)
+	utf8MsgLen := utf8.RuneCountInString(entry.Message)
+	subLen := msgLen - utf8MsgLen
+
 	msgCeilLen := int(math.Ceil(float64(msgLen)/4.0) * 4.0)
 
-	if strings.Index(entry.Message, "债基") != -1 {
+	// if strings.Index(entry.Message, "债基") != -1 {
+	// 	fmt.Println("01:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// }
+
+	if subLen > 0 {
+		f.MsgReservedWidth = overLen - subLen
 		fmt.Println("01:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-	}
-	if strings.Index(entry.Message, "月还") != -1 {
-		fmt.Println("01:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-	}
-	if strings.Index(entry.Message, "还不够") != -1 {
-		fmt.Println("01:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	} else if overLen < msgCeilLen || overLen < f.MsgReservedWidth {
+		f.MsgReservedWidth = overLen
+		fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
 	}
 
-	if msgLen > 1 {
-		if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
-			if overFloLen-2 >= msgCeilLen {
-				if strings.Index(entry.Message, "债基") != -1 {
-					f.MsgReservedWidth = overFloLen - 4
-					fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-				}
-				if strings.Index(entry.Message, "月还") != -1 {
-					f.MsgReservedWidth = overFloLen - 2
-					fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-				}
-				if strings.Index(entry.Message, "为什么还不够呢") != -1 {
-					f.MsgReservedWidth = overFloLen - 7
-					fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-				}
-				if strings.Index(entry.Message, "晕呵") != -1 {
-					f.MsgReservedWidth = overFloLen - 6
-					fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-				}
-				// f.MsgReservedWidth = msgCeilLen
-			} else {
-				f.MsgReservedWidth = overFloLen - 2
-				if strings.Index(entry.Message, "债基") != -1 {
-					fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-				}
-				if strings.Index(entry.Message, "月还") != -1 {
-					fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-				}
-				if strings.Index(entry.Message, "还不够") != -1 {
-					fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-				}
-			}
-		} else if overLen < msgCeilLen || overLen < f.MsgReservedWidth {
-			f.MsgReservedWidth = overLen
-		}
-	}
-	if strings.Index(entry.Message, "债基") != -1 {
-		fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-	}
-	if strings.Index(entry.Message, "月还") != -1 {
-		fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-	}
-	if strings.Index(entry.Message, "还不够") != -1 {
-		fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
-	}
+	// if msgLen > 1 {
+	// 	if index, ok := exutf8.RuneIndexInString(entry.Message, 1); ok && index > 1 {
+	// 		if overFloLen-2 >= msgCeilLen {
+	// 			if strings.Index(entry.Message, "债基") != -1 {
+	// 				f.MsgReservedWidth = overFloLen - 4
+	// 				fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// 			}
+	// 			if strings.Index(entry.Message, "月还") != -1 {
+	// 				f.MsgReservedWidth = overFloLen - 2
+	// 				fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// 			}
+	// 			if strings.Index(entry.Message, "为什么还不够呢") != -1 {
+	// 				f.MsgReservedWidth = overFloLen - 7
+	// 				fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// 			}
+	// 			if strings.Index(entry.Message, "晕呵") != -1 {
+	// 				f.MsgReservedWidth = overFloLen - 6
+	// 				fmt.Println("02:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// 			}
+	// 			// f.MsgReservedWidth = msgCeilLen
+	// 		} else {
+	// 			f.MsgReservedWidth = overFloLen - 2
+	// 			if strings.Index(entry.Message, "债基") != -1 {
+	// 				fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// 			}
+	// 			if strings.Index(entry.Message, "月还") != -1 {
+	// 				fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// 			}
+	// 			if strings.Index(entry.Message, "还不够") != -1 {
+	// 				fmt.Println("03:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// 			}
+	// 		}
+	// 	} else if overLen < msgCeilLen || overLen < f.MsgReservedWidth {
+	// 		f.MsgReservedWidth = overLen
+	// 	}
+	// }
+	// if strings.Index(entry.Message, "债基") != -1 {
+	// 	fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// }
+	// if strings.Index(entry.Message, "月还") != -1 {
+	// 	fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// }
+	// if strings.Index(entry.Message, "还不够") != -1 {
+	// 	fmt.Println("04:", msgLen, msgCeilLen, overLen, overFloLen, f.MsgReservedWidth, callerLen)
+	// }
 
 	reserved := ` %-` + fmt.Sprintf("%ds", f.MsgReservedWidth)
 	switch {
