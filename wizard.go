@@ -24,10 +24,12 @@ var (
 	files         = []string{" ", "config", "dev_config", "test_config", "release_config"}
 	fileType      = []string{"toml", "yaml"}
 	kentRepoSlice = []string{
-		"github.com/spiderorg/",
-		"github.com/penhauer-xiao/",
+		"github.com/selead/",
+		"github.com/vinerr/",
 		"github.com/wpecker",
-		"github.com/aialbatross/",
+		"github.com/oliveo/",
+		"github.com/cuckoe/",
+		"github.com/guavao/",
 	}
 )
 
@@ -177,6 +179,8 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 	if idx := strings.LastIndex(function, ".func"); idx != -1 {
 		function = function[0:idx]
 	}
+	function = strings.ReplaceAll(function, ".(", ".")
+	function = strings.ReplaceAll(function, ").", ".")
 
 	if idx := strings.Index(function, "github.com"); idx == -1 {
 		if idx = strings.Index(function, "/"); idx != -1 {
@@ -185,7 +189,7 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 	} else {
 		for _, v := range kentRepoSlice {
 			if idx := strings.Index(function, v); idx != -1 {
-				function = "~" + function[idx+len(v):]
+				function = "@" + function[idx+len(v):]
 				break
 			}
 		}
