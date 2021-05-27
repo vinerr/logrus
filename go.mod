@@ -1,4 +1,4 @@
-module github.com/vinerr/logrus
+module github.com/sirupsen/logrus
 
 go 1.16
 
