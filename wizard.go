@@ -189,7 +189,7 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 	} else {
 		for _, v := range kentRepoSlice {
 			if idx := strings.Index(function, v); idx != -1 {
-				function = "@" + function[idx+len(v):]
+				function = "^" + function[idx+len(v)+1:]
 				break
 			}
 		}
