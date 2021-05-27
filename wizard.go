@@ -11,6 +11,8 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"gopkg.in/natefinch/lumberjack.v2"
+
+	"github.com/thinkeridea/go-extend/exstrings"
 )
 
 const (
@@ -43,17 +45,17 @@ func init() {
 	}
 
 	if strings.Contains(os.Args[0], `./`) {
-		appName = strings.Replace(os.Args[0], `./`, "", -1)
+		appName = exstrings.Replace(os.Args[0], `./`, "", -1)
 	} else {
 		if idx := strings.LastIndex(os.Args[0], "/"); idx != -1 {
-			appName = os.Args[0][idx+1:]
+			appName = exstrings.SubString(os.Args[0], idx+1, 0)
 		}
 	}
 	Infoln(appName)
 
 	pwd, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err == nil {
-		paths[0] = pwd[1:]
+		paths[0] = exstrings.SubString(pwd, 1, 0)
 		files[0] = appName
 	}
 
@@ -172,28 +174,32 @@ func init() {
 func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 	file = frame.File
 	if idx := strings.LastIndex(file, "/"); idx != -1 {
-		file = file[idx+1:]
+		file = exstrings.SubString(file, idx+1, 0)
 	}
+
+	file = exstrings.Replace(file, ".go", "", -1)
 	file = fmt.Sprintf("%s:%d", file, frame.Line)
+
 	function = frame.Function
 	if idx := strings.LastIndex(function, ".func"); idx != -1 {
-		function = function[0:idx]
+		function = exstrings.SubString(function, 0, idx)
 	}
-	function = strings.ReplaceAll(function, ".(", ".")
-	function = strings.ReplaceAll(function, ").", ".")
 
 	if idx := strings.Index(function, "github.com"); idx == -1 {
 		if idx = strings.Index(function, "/"); idx != -1 {
-			function = function[idx+1:]
+			function = exstrings.SubString(function, idx+1, 0)
 		}
 	} else {
 		for _, v := range kentRepoSlice {
 			if idx := strings.Index(function, v); idx != -1 {
-				function = "^" + function[idx+len(v)+1:]
+				function = "^" + exstrings.SubString(function, idx+len(v)+1, 0)
 				break
 			}
 		}
 	}
+	function = exstrings.Replace(function, ".(", ".", -1)
+	function = exstrings.Replace(function, ").", ".", -1)
+	function = exstrings.Replace(function, "main.", "m.", -1)
 	return function, file
 }
 
@@ -203,7 +209,7 @@ func SetCallerPretty(call func(*runtime.Frame) (function string, file string)) {
 
 func setOutput(file string) {
 	if file == "APP.log" {
-		file = strings.Replace(file, "APP", appName, -1)
+		file = exstrings.Replace(file, "APP", appName, -1)
 	}
 
 	if !viper.IsSet("log.max_size") &&
@@ -280,7 +286,7 @@ func readConfig() {
 	}
 	if err != nil {
 		e := fmt.Sprintf("%s", err)
-		e = strings.Replace(e, "release_config", strings.Join(files, ","), -1)
+		e = exstrings.Replace(e, "release_config", exstrings.Join(files, ","), -1)
 		Fatalf("%s", e)
 	}
 	return

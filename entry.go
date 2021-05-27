@@ -166,7 +166,7 @@ func getPackageName(f string) string {
 		lastPeriod := strings.LastIndex(f, ".")
 		lastSlash := strings.LastIndex(f, "/")
 		if lastPeriod > lastSlash {
-			f = f[:lastPeriod]
+			f = exstrings.SubString(f, 0, lastPeriod)
 		} else {
 			break
 		}

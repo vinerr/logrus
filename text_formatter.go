@@ -249,7 +249,7 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 
 	levelText := strings.ToUpper(entry.Level.String())
 	if !f.DisableLevelTruncation && !f.PadLevelText {
-		levelText = levelText[0:4]
+		levelText = exstrings.SubString(levelText, 0, 4)
 	}
 	if f.PadLevelText {
 		// Generates the format string used in the next line, for example "%-6s" or "%-7s".
