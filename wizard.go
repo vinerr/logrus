@@ -28,10 +28,18 @@ var (
 	kentRepoSlice = []string{
 		"github.com/selead/",
 		"github.com/vinerr/",
-		"github.com/wpecker",
+		"github.com/wpecker/",
 		"github.com/oliveo/",
 		"github.com/cuckoe/",
 		"github.com/guavao/",
+	}
+	kentRepoMap = map[uint8]int{
+		0: 18,
+		1: 18,
+		2: 19,
+		3: 18,
+		4: 18,
+		5: 18,
 	}
 )
 
@@ -190,9 +198,13 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 			function = exstrings.SubString(function, idx+1, 0)
 		}
 	} else {
-		for _, v := range kentRepoSlice {
+		for i, v := range kentRepoSlice {
 			if idx := strings.Index(function, v); idx != -1 {
-				function = "^" + exstrings.SubString(function, idx+len(v)+1, 0)
+				Len := 18
+				if i == 2 {
+					Len = 19
+				}
+				function = "^" + exstrings.SubString(function, idx+Len+1, 0)
 				break
 			}
 		}

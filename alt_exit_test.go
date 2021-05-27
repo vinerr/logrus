@@ -110,7 +110,7 @@ func getPackage() []byte {
 	pc, _, _, _ := runtime.Caller(0)
 	fullFuncName := runtime.FuncForPC(pc).Name()
 	idx := strings.LastIndex(fullFuncName, ".")
-	return exstrings.Bytes(exstrings.SubString(fullFuncName, 0, idx)) // trim off function details
+	return []byte(fullFuncName[:idx]) // trim off function details
 }
 
 var testprogleader = []byte(`
