@@ -10,6 +10,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/thinkeridea/go-extend/exstrings"
 )
 
 var (

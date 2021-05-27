@@ -11,6 +11,8 @@ import (
 	"sync"
 	"time"
 	"unicode/utf8"
+
+	"github.com/thinkeridea/go-extend/exstrings"
 )
 
 const (
