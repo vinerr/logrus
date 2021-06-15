@@ -205,7 +205,7 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 				function = exstrings.SubString(function, idx+Len, 0)
 				if len(file) == 1 && exstrings.SubString(function, -2, 1) == "." {
 					if idx := strings.Index(function, "/"); idx != -1 {
-						function = "^" + exstrings.SubString(function, idx+1, 0)
+						function = exstrings.SubString(function, idx+1, 0)
 					}
 				} else {
 					function = "^" + function
