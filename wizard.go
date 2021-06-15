@@ -184,9 +184,7 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 	if idx := strings.LastIndex(file, "/"); idx != -1 {
 		file = exstrings.SubString(file, idx+1, 0)
 	}
-
 	file = exstrings.Replace(file, ".go", "", -1)
-	file = fmt.Sprintf("%s:%d", file, frame.Line)
 
 	function = frame.Function
 	if idx := strings.LastIndex(function, ".func"); idx != -1 {
@@ -204,7 +202,14 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 				if i == 2 {
 					Len = 19
 				}
-				function = "^" + exstrings.SubString(function, idx+Len, 0)
+				function = exstrings.SubString(function, idx+Len, 0)
+				if len(file) == 1 && exstrings.SubString(function, -2, 1) == "." {
+					if idx := strings.Index(function, "/"); idx != -1 {
+						function = "^" + exstrings.SubString(function, idx+1, 0)
+					}
+				} else {
+					function = "^" + function
+				}
 				break
 			}
 		}
@@ -212,6 +217,7 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 	function = exstrings.Replace(function, ".(", ".", -1)
 	function = exstrings.Replace(function, ").", ".", -1)
 	function = exstrings.Replace(function, "main.", "m.", -1)
+	file = fmt.Sprintf("%s:%d", file, frame.Line)
 	return function, file
 }
 
