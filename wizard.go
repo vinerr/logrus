@@ -203,9 +203,13 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 					Len = 19
 				}
 				function = exstrings.SubString(function, idx+Len, 0)
-				if len(file) == 1 { // && exstrings.SubString(function, -2, 1) == "."
-					if idx := strings.Index(function, "/"); idx != -1 {
-						function = exstrings.SubString(function, idx+1, 0)
+				if len(file) == 1 {
+					if exstrings.SubString(function, -2, 1) == "." {
+						function = exstrings.SubString(function, -1, 1)
+					} else {
+						if idx := strings.Index(function, "/"); idx != -1 {
+							function = exstrings.SubString(function, idx+1, 0)
+						}
 					}
 				} else {
 					function = "^" + function
@@ -214,9 +218,11 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 			}
 		}
 	}
-	function = exstrings.Replace(function, ".(", ".", -1)
-	function = exstrings.Replace(function, ").", ".", -1)
-	function = exstrings.Replace(function, "main.", "m.", -1)
+	if len(function) != 1 {
+		function = exstrings.Replace(function, ".(", ".", -1)
+		function = exstrings.Replace(function, ").", ".", -1)
+		function = exstrings.Replace(function, "main.", "m.", -1)
+	}
 	file = fmt.Sprintf("%s:%d", file, frame.Line)
 	return function, file
 }
