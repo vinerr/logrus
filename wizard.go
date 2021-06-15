@@ -204,7 +204,7 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 				if i == 2 {
 					Len = 19
 				}
-				function = "^" + exstrings.SubString(function, idx+Len+1, 0)
+				function = "^" + exstrings.SubString(function, idx+Len, 0)
 				break
 			}
 		}
