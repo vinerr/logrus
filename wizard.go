@@ -192,15 +192,12 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 	}
 
 	if idx := strings.Index(function, "github.com"); idx == -1 {
-		fmt.Println("001", function)
 		if idx = strings.Index(function, "/"); idx != -1 {
 			function = exstrings.SubString(function, idx+1, 0)
-			fmt.Println("002", function)
-			if len(file) == 1 {
-				if exstrings.SubString(function, -2, 1) == "." {
-					function = exstrings.SubString(function, -1, 1)
-					fmt.Println("003", function)
-				}
+		}
+		if len(file) == 1 {
+			if exstrings.SubString(function, -2, 1) == "." {
+				function = exstrings.SubString(function, -1, 1)
 			}
 		}
 	} else {
