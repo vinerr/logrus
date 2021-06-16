@@ -222,8 +222,10 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 		function = exstrings.Replace(function, ".(", ".", -1)
 		function = exstrings.Replace(function, ").", ".", -1)
 		function = exstrings.Replace(function, "main.", "m.", -1)
+		file = fmt.Sprintf("%s:%d", file, frame.Line)
+	} else {
+		file = fmt.Sprintf("%s%d", file, frame.Line)
 	}
-	file = fmt.Sprintf("%s:%d", file, frame.Line)
 	return function, file
 }
 
