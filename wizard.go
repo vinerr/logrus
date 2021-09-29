@@ -196,8 +196,8 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 			function = exstrings.SubString(function, idx+1, 0)
 		}
 		if len(file) == 1 {
-			if exstrings.SubString(function, -2, 1) == "." {
-				function = exstrings.SubString(function, -1, 1)
+			if newFun := shortPrint(function); newFun != "" {
+				function = newFun
 			}
 		}
 	} else {
@@ -209,8 +209,8 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 				}
 				function = exstrings.SubString(function, idx+Len, 0)
 				if len(file) == 1 {
-					if exstrings.SubString(function, -2, 1) == "." {
-						function = exstrings.SubString(function, -1, 1)
+					if newFun := shortPrint(function); newFun != "" {
+						function = newFun
 					} else {
 						if idx := strings.Index(function, "/"); idx != -1 {
 							function = exstrings.SubString(function, idx+1, 0)
@@ -232,6 +232,23 @@ func defaultCallerPretty(frame *runtime.Frame) (function string, file string) {
 		file = fmt.Sprintf("%s%d", file, frame.Line)
 	}
 	return function, file
+}
+
+func shortPrint(function string) (newFunction string) {
+	y := ""
+	if exstrings.SubString(function, -2, 1) == "." { // .w
+		return exstrings.SubString(function, -1, 1)
+	} else if exstrings.SubString(function, -3, 1) == "." { // .w1
+		newFunction = exstrings.SubString(function, -2, 2)
+		y = exstrings.SubString(function, -1, 1)
+	} else if exstrings.SubString(function, -4, 1) == "." { // .ww1
+		newFunction = exstrings.SubString(function, -3, 3)
+		y = exstrings.SubString(function, -1, 1)
+	}
+	if y >= "0" && y <= "9" {
+		return newFunction
+	}
+	return ""
 }
 
 func SetCallerPretty(call func(*runtime.Frame) (function string, file string)) {
