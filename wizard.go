@@ -244,6 +244,9 @@ func shortPrint(function string) (newFunction string) {
 	} else if exstrings.SubString(function, -4, 1) == "." { // .ww1
 		newFunction = exstrings.SubString(function, -3, 3)
 		y = exstrings.SubString(function, -1, 1)
+	} else if exstrings.SubString(function, -5, 1) == "." { // .www1
+		newFunction = exstrings.SubString(function, -4, 4)
+		y = exstrings.SubString(function, -1, 1)
 	}
 	if y >= "0" && y <= "9" {
 		return newFunction
