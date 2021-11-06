@@ -286,26 +286,30 @@ func (f *TextFormatter) printColored(b *bytes.Buffer, entry *Entry, keys []strin
 	}
 
 	// Modify by kent
+
 	if f.MsgReservedWidth <= 0 {
-		f.MsgReservedWidth = 70
+		f.MsgReservedWidth = 139
 	}
 
 	callerLen := len(caller)
-	overLen := 139 - callerLen
+	overLen := f.MsgReservedWidth - callerLen
 
 	msgLen := len(entry.Message)
 	utf8MsgLen := utf8.RuneCountInString(entry.Message)
 	subLen := msgLen - utf8MsgLen
 
+	msgReservedWidth := 0
 	if subLen > 0 {
 		if overLen-subLen > 0 {
-			f.MsgReservedWidth = overLen - subLen
+			msgReservedWidth = overLen - subLen
+		} else {
+			msgReservedWidth = 70
 		}
 	} else if overLen > 0 {
-		f.MsgReservedWidth = overLen
+		msgReservedWidth = overLen
 	}
 
-	reserved := ` %-` + fmt.Sprintf("%ds", f.MsgReservedWidth)
+	reserved := ` %-` + fmt.Sprintf("%ds", msgReservedWidth)
 	switch {
 	case f.DisableTimestamp:
 		_, _ = fmt.Fprintf(b, "\x1b[%dm%s\x1b[0m"+reserved, levelColor, levelText, entry.Message)
